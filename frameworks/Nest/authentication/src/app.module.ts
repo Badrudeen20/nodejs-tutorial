@@ -1,14 +1,24 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { LoginModule } from './auth/login/login.module';
-import { RegisterModule } from './auth/register/register.module';
-import { DashboardModule } from './admin/dashboard/dashboard.module';
-import { UsersModule } from './admin/users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'entities/user.entity';
+import { AdminModule } from './admin/admin.module';
+import { Movie } from 'entities/movie.entity';
+import { ClientModule } from './client/client.module';
 
 @Module({
-  imports: [LoginModule, RegisterModule, DashboardModule, UsersModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [TypeOrmModule.forRoot({
+    type: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    username: 'root',
+    password: '',
+    database: 'nestjs',
+    entities: [User,Movie],
+    autoLoadEntities: true,
+    synchronize: true,
+ }),AuthModule,AdminModule,ClientModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
